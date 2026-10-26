@@ -8,6 +8,8 @@
   position: relative;
   height: 100%;
   overflow: auto;
+  /* Keeps row churn while scrolling from invalidating layout outside the grid. */
+  contain: strict;
   background: var(--surface);
   outline: none;
   overscroll-behavior: contain;
@@ -162,6 +164,7 @@ body.is-resizing-column {
 
 .grid__row {
   position: absolute;
+  contain: layout style;
   left: 0;
   display: flex;
   width: var(--grid-w);

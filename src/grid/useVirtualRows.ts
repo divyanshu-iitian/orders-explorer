@@ -16,7 +16,8 @@ export function useVirtualRows(
   scrollerRef: RefObject<HTMLElement | null>,
   { rowCount, rowHeight, headerHeight, overscan = 8 }: VirtualRowsOptions,
 ) {
-  const [scrollTop, setScrollTop] = useState(0)
+  // Tracked as a row number rather than pixels: scrolling within a row does not re-render.
+  const [firstRow, setFirstRow] = useState(0)
   const [viewportHeight, setViewportHeight] = useState(0)
 
   useLayoutEffect(() => {
@@ -30,12 +31,12 @@ export function useVirtualRows(
 
   const onScroll = useCallback(() => {
     const el = scrollerRef.current
-    if (el) setScrollTop(el.scrollTop)
-  }, [scrollerRef])
+    if (el) setFirstRow(Math.floor(el.scrollTop / rowHeight))
+  }, [scrollerRef, rowHeight])
 
   const bodyHeight = Math.max(0, viewportHeight - headerHeight)
-  const start = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan)
-  const end = Math.min(rowCount, Math.ceil((scrollTop + bodyHeight) / rowHeight) + overscan)
+  const start = Math.max(0, firstRow - overscan)
+  const end = Math.min(rowCount, firstRow + Math.ceil(bodyHeight / rowHeight) + 1 + overscan)
 
   return { start, end, bodyHeight, onScroll }
 }

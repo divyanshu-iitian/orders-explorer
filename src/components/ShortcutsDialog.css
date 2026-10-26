@@ -1,0 +1,63 @@
+.shortcuts {
+  width: min(560px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow-panel);
+  color: var(--text);
+}
+
+.shortcuts::backdrop {
+  background: rgb(16 24 40 / 0.35);
+}
+
+.shortcuts__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px 10px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.shortcuts__header h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.shortcuts__body {
+  display: grid;
+  gap: 14px;
+  padding: 14px 18px 18px;
+}
+
+.shortcuts h3 {
+  margin: 0 0 6px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.shortcuts dl {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+}
+
+.shortcuts dl > div {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  align-items: center;
+}
+
+.shortcuts dt {
+  display: flex;
+  gap: 3px;
+}
+
+.shortcuts dd {
+  margin: 0;
+}

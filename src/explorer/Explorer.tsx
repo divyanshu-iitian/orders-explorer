@@ -3,6 +3,7 @@ import { DetailsPanel } from '../components/DetailsPanel'
 import { LinkProblems } from '../components/LinkProblems'
 import { DownloadIcon } from '../components/icons'
 import { NoResults } from '../components/NoResults'
+import { ShortcutsDialog } from '../components/ShortcutsDialog'
 import { Topbar } from '../components/Topbar'
 import type { FieldKey } from '../data/fields'
 import { buildOrderIndex } from '../data/orderIndex'
@@ -28,7 +29,7 @@ interface ExplorerProps {
   report: NormalizeReport
 }
 
-export function Explorer({ orders }: ExplorerProps) {
+export function Explorer({ orders, report }: ExplorerProps) {
   const index = useMemo(() => buildOrderIndex(orders), [orders])
   // The link is read once, after the data is in, so selected ids can be checked against it.
   const [initial] = useState(() => parseViewState(location.search, (id) => index.positionById.has(id)))
@@ -39,6 +40,7 @@ export function Explorer({ orders }: ExplorerProps) {
   const [selection, setSelection] = useState<Selection>(initial.state.selection)
   const [focus, setFocus] = useState<GridFocus>({ row: 0, col: 'id' })
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
   const [filtersCollapsed, setFiltersCollapsed] = useState(() => readStored('filters-collapsed') === true)
   const [filterFocusRequest, setFilterFocusRequest] = useState(0)
   const { widths, resize, reset } = useColumnWidths()
@@ -106,16 +108,23 @@ export function Explorer({ orders }: ExplorerProps) {
   const clearFilters = useCallback(() => setFilter([]), [])
   const focusGrid = useCallback(() => gridAreaRef.current?.querySelector<HTMLElement>('[role="grid"]')?.focus(), [])
 
+  // Keyboard users land in the grid and can start moving straight away.
+  useEffect(() => focusGrid(), [focusGrid])
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && detailsOpen) {
         setDetailsOpen(false)
         return
       }
-      if (event.key === '/' && !event.ctrlKey && !event.metaKey && !isTyping(event.target)) {
+      if (event.ctrlKey || event.metaKey || event.altKey || isTyping(event.target)) return
+      if (event.key === '/') {
         event.preventDefault()
         setFiltersCollapsed(false)
         setFilterFocusRequest((n) => n + 1)
+      } else if (event.key === '?') {
+        event.preventDefault()
+        setHelpOpen(true)
       }
     }
     window.addEventListener('keydown', onKey)
@@ -207,6 +216,34 @@ export function Explorer({ orders }: ExplorerProps) {
           )}
         </div>
       </main>
+
+      <footer className="statusbar">
+        <span className="statusbar__hints">
+          <kbd>↑</kbd>
+          <kbd>↓</kbd>
+          <kbd>←</kbd>
+          <kbd>→</kbd> move <kbd>Enter</kbd> details <kbd>Space</kbd> select <kbd>/</kbd> filters
+          <button type="button" className="btn btn--link" onClick={() => setHelpOpen(true)}>
+            All shortcuts <kbd>?</kbd>
+          </button>
+        </span>
+        <span
+          className="statusbar__data"
+          title="Records with the same order id are merged as described in data-notes.md"
+        >
+          {formatCount(report.read)} records in orders.json · {formatCount(report.duplicatesRemoved)} duplicate ids
+          merged
+        </span>
+      </footer>
+
+      {helpOpen && (
+        <ShortcutsDialog
+          onClose={() => {
+            setHelpOpen(false)
+            focusGrid()
+          }}
+        />
+      )}
     </div>
   )
 }
