@@ -1,0 +1,83 @@
+.load-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  padding: 24px;
+  text-align: center;
+}
+
+.load-state__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(640px, 90%);
+  margin-bottom: 24px;
+}
+
+.load-state__skeleton span {
+  height: 12px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #eceef1 0%, #f5f6f8 50%, #eceef1 100%);
+  background-size: 200% 100%;
+  animation: load-shimmer 1.4s ease-in-out infinite;
+}
+
+.load-state__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.load-state__detail {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.load-state__bar {
+  position: relative;
+  width: 240px;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.load-state__bar span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--accent);
+  transition: width 120ms linear;
+}
+
+.load-state__bar span.is-indeterminate {
+  width: 35%;
+  animation: load-slide 1s ease-in-out infinite;
+}
+
+@keyframes load-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes load-slide {
+  from {
+    left: -35%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .load-state__skeleton span,
+  .load-state__bar span.is-indeterminate {
+    animation: none;
+  }
+}
