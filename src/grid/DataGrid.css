@@ -84,6 +84,80 @@
   text-overflow: ellipsis;
 }
 
+.hcell__pin {
+  display: none;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-faint);
+}
+
+.hcell:hover .hcell__pin,
+.hcell__pin[aria-pressed='true'] {
+  display: grid;
+}
+
+.hcell__pin:hover {
+  background: rgb(0 0 0 / 0.06);
+  color: var(--text);
+}
+
+.hcell__pin[aria-pressed='true'] {
+  color: var(--accent);
+}
+
+.hcell__resize {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  bottom: 0;
+  z-index: 2;
+  width: 8px;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.hcell__resize::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 3px;
+  width: 2px;
+  border-radius: 1px;
+}
+
+.hcell__resize:hover::after,
+.hcell__resize:active::after {
+  background: var(--accent);
+}
+
+body.is-resizing-column {
+  cursor: col-resize;
+  user-select: none;
+}
+
+/* ---- pinned column ---- */
+
+.hcell--pinned,
+.gcell--pinned {
+  position: sticky;
+  left: var(--pin-left, 0px);
+  z-index: 1;
+  border-right: 1px solid var(--border-strong);
+}
+
+.grid.is-scrolled-x .hcell--pinned,
+.grid.is-scrolled-x .gcell--pinned {
+  box-shadow: 3px 0 4px -2px rgb(16 24 40 / 0.14);
+}
+
 /* ---- rows ---- */
 
 .grid__row {
@@ -113,12 +187,10 @@
 
 .gcell--right {
   text-align: right;
-  font-variant-numeric: tabular-nums;
 }
 
-.gcell--mono {
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
+.gcell--numeric {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---- cell content ---- */

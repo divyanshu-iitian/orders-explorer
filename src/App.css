@@ -1,6 +1,7 @@
 .app {
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   height: 100%;
   min-width: 960px;
 }
@@ -27,6 +28,8 @@
 }
 
 .workspace {
+  min-width: 0;
   min-height: 0;
+  overflow: hidden;
   background: var(--surface);
 }

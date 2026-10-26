@@ -8,7 +8,8 @@ export interface Column {
   label: string
   defaultWidth: number
   align?: 'right'
-  mono?: boolean
+  /** Tabular digits so ids and numbers line up down the column. */
+  numeric?: boolean
   /** Long values get a tooltip with the full text. */
   truncate?: boolean
   /** Plain text for the cell; also used as the tooltip. */
@@ -23,7 +24,7 @@ const enumText = (key: 'status' | 'region' | 'channel' | 'paymentMethod') => (o:
   optionLabel(key, o[key]) || EMPTY
 
 export const COLUMNS: readonly Column[] = [
-  { key: 'id', label: 'Order ID', defaultWidth: 112, mono: true, text: (o) => o.id },
+  { key: 'id', label: 'Order ID', defaultWidth: 112, numeric: true, text: (o) => o.id },
   { key: 'customer', label: 'Customer', defaultWidth: 150, truncate: true, text: (o) => o.customer || EMPTY },
   { key: 'email', label: 'Email', defaultWidth: 220, truncate: true, text: (o) => o.email || EMPTY },
   {
@@ -34,8 +35,22 @@ export const COLUMNS: readonly Column[] = [
     render: (o) =>
       o.status ? <span className={`status status--${o.status}`}>{optionLabel('status', o.status)}</span> : EMPTY,
   },
-  { key: 'amount', label: 'Amount', defaultWidth: 116, align: 'right', text: (o) => formatAmount(o.amount) },
-  { key: 'itemCount', label: 'Items', defaultWidth: 64, align: 'right', text: (o) => formatNumber(o.itemCount) },
+  {
+    key: 'amount',
+    label: 'Amount',
+    defaultWidth: 116,
+    align: 'right',
+    numeric: true,
+    text: (o) => formatAmount(o.amount),
+  },
+  {
+    key: 'itemCount',
+    label: 'Items',
+    defaultWidth: 64,
+    align: 'right',
+    numeric: true,
+    text: (o) => formatNumber(o.itemCount),
+  },
   {
     key: 'priority',
     label: 'Priority',
@@ -51,8 +66,20 @@ export const COLUMNS: readonly Column[] = [
   { key: 'region', label: 'Region', defaultWidth: 96, text: enumText('region') },
   { key: 'channel', label: 'Channel', defaultWidth: 82, text: enumText('channel') },
   { key: 'paymentMethod', label: 'Payment', defaultWidth: 96, text: enumText('paymentMethod') },
-  { key: 'createdAt', label: 'Created (UTC)', defaultWidth: 140, text: (o) => formatDateTime(o.createdAt) },
-  { key: 'updatedAt', label: 'Updated (UTC)', defaultWidth: 140, text: (o) => formatDateTime(o.updatedAt) },
+  {
+    key: 'createdAt',
+    label: 'Created (UTC)',
+    defaultWidth: 140,
+    numeric: true,
+    text: (o) => formatDateTime(o.createdAt),
+  },
+  {
+    key: 'updatedAt',
+    label: 'Updated (UTC)',
+    defaultWidth: 140,
+    numeric: true,
+    text: (o) => formatDateTime(o.updatedAt),
+  },
   {
     key: 'notes',
     label: 'Notes',
