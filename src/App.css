@@ -1,13 +1,13 @@
 .app {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-columns: minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   height: 100%;
   min-width: 960px;
 }
 
 .topbar {
   display: flex;
+  flex: none;
   align-items: center;
   gap: 16px;
   height: 44px;
@@ -25,11 +25,39 @@
 
 .topbar__count {
   color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.topbar__count strong,
+.topbar__selection strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.topbar__selection {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+
+.topbar__selection .btn--link {
+  margin-left: 4px;
 }
 
 .workspace {
+  display: flex;
+  flex: 1;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
   background: var(--surface);
+}
+
+.grid-area {
+  position: relative;
+  flex: 1;
+  min-width: 0;
 }

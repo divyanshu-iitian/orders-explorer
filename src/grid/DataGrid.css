@@ -193,6 +193,75 @@ body.is-resizing-column {
   font-variant-numeric: tabular-nums;
 }
 
+.grid__row.is-selected {
+  background: var(--row-selected);
+}
+
+.grid__row.is-selected:hover {
+  background: var(--row-selected-hover);
+}
+
+/* The focused cell: a solid ring while the grid has keyboard focus, a faint
+   one otherwise so the user can still see where arrow keys will start from. */
+.gcell.is-focused {
+  outline: 1px solid #a9bce9;
+  outline-offset: -1px;
+}
+
+.grid:focus .gcell.is-focused {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+/* A bar on the left edge marks the focused row even when the focused cell is scrolled out of view. */
+.grid:focus .grid__row.is-focus-row .gcell--check {
+  box-shadow: inset 3px 0 0 var(--focus);
+}
+
+/* ---- checkbox column ---- */
+
+.hcell--check,
+.gcell--check {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: var(--check-w);
+  padding: 0;
+}
+
+.hcell--check input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.gcell--check {
+  cursor: pointer;
+}
+
+.check {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.grid__row:hover .check {
+  border-color: #98a2ad;
+}
+
+.grid__row.is-selected .check {
+  border-color: var(--accent);
+  background: var(--accent)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 12px no-repeat;
+}
+
 /* ---- cell content ---- */
 
 .muted {
