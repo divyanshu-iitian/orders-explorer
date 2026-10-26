@@ -65,3 +65,12 @@
 .topbar__count.is-updating {
   opacity: 0.6;
 }
+
+.topbar__spacer {
+  flex: 1;
+}
+
+.topbar__notice {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}

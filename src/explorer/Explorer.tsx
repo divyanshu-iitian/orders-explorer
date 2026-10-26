@@ -1,11 +1,13 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { DetailsPanel } from '../components/DetailsPanel'
 import { LinkProblems } from '../components/LinkProblems'
+import { DownloadIcon } from '../components/icons'
 import { NoResults } from '../components/NoResults'
 import { Topbar } from '../components/Topbar'
 import type { FieldKey } from '../data/fields'
 import { buildOrderIndex } from '../data/orderIndex'
 import type { NormalizeReport, Order } from '../data/types'
+import { downloadCsv, exportFileName, ordersToCsv } from '../export/csv'
 import { compileFilter } from '../filters/compile'
 import { FilterChips } from '../filters/FilterChips'
 import { FilterPanel } from '../filters/FilterPanel'
@@ -76,6 +78,26 @@ export function Explorer({ orders }: ExplorerProps) {
   )
   const selectedHidden = selection.size - selectedInView
 
+  // Export takes the selected orders the user can currently see, in the grid's
+  // order, so it always matches the "N selected" count. See README.
+  const [exportNotice, setExportNotice] = useState('')
+  const exportSelection = () => {
+    const picked: Order[] = []
+    for (const position of rows) {
+      const order = orders[position]
+      if (selection.has(order.id)) picked.push(order)
+    }
+    if (picked.length === 0) return
+    const fileName = exportFileName(picked.length)
+    downloadCsv(fileName, ordersToCsv(picked))
+    setExportNotice(`Exported ${formatCount(picked.length)} ${picked.length === 1 ? 'order' : 'orders'} to ${fileName}`)
+  }
+  useEffect(() => {
+    if (!exportNotice) return
+    const timer = window.setTimeout(() => setExportNotice(''), 4000)
+    return () => window.clearTimeout(timer)
+  }, [exportNotice])
+
   const focusedOrder = rows.length > 0 ? orders[rows[Math.min(focus.row, rows.length - 1)]] : null
 
   const onSort = useCallback((key: FieldKey) => setSort((current) => nextSort(current, key)), [])
@@ -109,12 +131,32 @@ export function Explorer({ orders }: ExplorerProps) {
         {selection.size > 0 && (
           <span className="topbar__selection">
             <strong>{formatCount(selectedInView)}</strong> selected
-            {selectedHidden > 0 && <span className="muted"> · {formatCount(selectedHidden)} hidden by filters</span>}
+            {selectedHidden > 0 && (
+              <span
+                className="muted"
+                title="These stay selected but are not counted or exported while the current filters hide them."
+              >
+                · {formatCount(selectedHidden)} more hidden by filters
+              </span>
+            )}
             <button type="button" className="btn btn--link" onClick={() => setSelection(new Set())}>
               Clear
             </button>
           </span>
         )}
+        <span className="topbar__spacer" />
+        <span className="topbar__notice" role="status">
+          {exportNotice}
+        </span>
+        <button
+          type="button"
+          className="btn btn--primary"
+          onClick={exportSelection}
+          disabled={selectedInView === 0}
+          title={selectedInView === 0 ? 'Select rows to export them' : 'Download the selected rows as CSV'}
+        >
+          <DownloadIcon /> Export {selectedInView > 0 ? formatCount(selectedInView) : ''} to CSV
+        </button>
       </Topbar>
 
       {linkProblems.length > 0 && <LinkProblems problems={linkProblems} onDismiss={() => setLinkProblems([])} />}
