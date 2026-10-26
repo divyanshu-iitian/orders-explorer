@@ -1,0 +1,87 @@
+.chips {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  min-height: 36px;
+  max-height: 84px;
+  overflow-y: auto;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.chips--empty {
+  gap: 4px;
+  color: var(--text-faint);
+}
+
+.chips__group,
+.chips__single {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+/* A group with several OR-ed chips gets a light frame so the grouping reads at a glance. */
+.chips__group {
+  padding: 2px 3px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 13px;
+}
+
+.chips__join {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.chips__join--and {
+  color: var(--text-muted);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 340px;
+  height: 22px;
+  padding: 0 2px 0 9px;
+  border: 1px solid #c8d5f5;
+  border-radius: 11px;
+  background: var(--accent-weak);
+  font-size: var(--fs-sm);
+  color: #1d3f9a;
+}
+
+.chip__label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.chip__remove {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+}
+
+.chip__remove:hover {
+  background: rgb(36 87 214 / 0.15);
+}
+
+.chips__clear {
+  margin-left: 6px;
+  font-size: var(--fs-sm);
+}

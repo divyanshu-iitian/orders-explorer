@@ -61,3 +61,7 @@
   flex: 1;
   min-width: 0;
 }
+
+.topbar__count.is-updating {
+  opacity: 0.6;
+}
