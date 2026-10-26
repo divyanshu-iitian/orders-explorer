@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.png binary
+# Source data must stay byte-for-byte identical to the original export.
+public/orders.json -text -diff linguist-generated
