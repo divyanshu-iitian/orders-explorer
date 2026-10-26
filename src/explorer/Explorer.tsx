@@ -1,5 +1,6 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { DetailsPanel } from '../components/DetailsPanel'
+import { LinkProblems } from '../components/LinkProblems'
 import { NoResults } from '../components/NoResults'
 import { Topbar } from '../components/Topbar'
 import type { FieldKey } from '../data/fields'
@@ -15,6 +16,8 @@ import { countVisible, toggleId, type Selection } from '../grid/selection'
 import { nextSort, sortPositions, type SortState } from '../grid/sort'
 import { formatCount } from '../lib/format'
 import { readStored, writeStored } from '../lib/storage'
+import { parseViewState } from '../url/urlState'
+import { useUrlSync } from '../url/useUrlSync'
 import { buildRows } from './rows'
 import { useColumnWidths } from './useColumnWidths'
 
@@ -25,10 +28,13 @@ interface ExplorerProps {
 
 export function Explorer({ orders }: ExplorerProps) {
   const index = useMemo(() => buildOrderIndex(orders), [orders])
-  const [filter, setFilter] = useState<Filter>([])
-  const [sort, setSort] = useState<SortState | null>(null)
-  const [pinned, setPinned] = useState<FieldKey | null>('id')
-  const [selection, setSelection] = useState<Selection>(() => new Set())
+  // The link is read once, after the data is in, so selected ids can be checked against it.
+  const [initial] = useState(() => parseViewState(location.search, (id) => index.positionById.has(id)))
+  const [linkProblems, setLinkProblems] = useState(initial.problems)
+  const [filter, setFilter] = useState<Filter>(initial.state.filter)
+  const [sort, setSort] = useState<SortState | null>(initial.state.sort)
+  const [pinned, setPinned] = useState<FieldKey | null>(initial.state.pinned)
+  const [selection, setSelection] = useState<Selection>(initial.state.selection)
   const [focus, setFocus] = useState<GridFocus>({ row: 0, col: 'id' })
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [filtersCollapsed, setFiltersCollapsed] = useState(() => readStored('filters-collapsed') === true)
@@ -37,6 +43,7 @@ export function Explorer({ orders }: ExplorerProps) {
   const gridAreaRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => writeStored('filters-collapsed', filtersCollapsed), [filtersCollapsed])
+  useUrlSync({ filter, sort, pinned, selection })
 
   // The pinned column moves to the far left, where it can stick while the rest scroll.
   const columns = useMemo(
@@ -109,6 +116,8 @@ export function Explorer({ orders }: ExplorerProps) {
           </span>
         )}
       </Topbar>
+
+      {linkProblems.length > 0 && <LinkProblems problems={linkProblems} onDismiss={() => setLinkProblems([])} />}
 
       <FilterChips
         filter={filter}

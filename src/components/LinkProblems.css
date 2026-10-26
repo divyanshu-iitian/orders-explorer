@@ -1,0 +1,28 @@
+.link-problems {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px 8px 14px;
+  border-bottom: 1px solid var(--warn-border);
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.link-problems > svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.link-problems__text {
+  flex: 1;
+}
+
+.link-problems__text ul {
+  margin: 2px 0 0;
+  padding-left: 18px;
+}
+
+.link-problems .icon-btn {
+  color: inherit;
+}
