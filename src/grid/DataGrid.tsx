@@ -1,6 +1,9 @@
 import { memo, useMemo, useRef, type CSSProperties, type ReactNode } from 'react'
+import type { FieldKey } from '../data/fields'
 import type { Order } from '../data/types'
 import { CELL_STYLE, type Column, type ColumnWidths } from './columns'
+import { HeaderCell } from './HeaderCell'
+import type { SortState } from './sort'
 import { useVirtualRows } from './useVirtualRows'
 import './DataGrid.css'
 
@@ -13,11 +16,13 @@ interface DataGridProps {
   rows: Int32Array
   columns: readonly Column[]
   widths: ColumnWidths
+  sort: SortState | null
+  onSort: (key: FieldKey) => void
   /** Shown under the header when there are no rows. */
   empty: ReactNode
 }
 
-export function DataGrid({ orders, rows, columns, widths, empty }: DataGridProps) {
+export function DataGrid({ orders, rows, columns, widths, sort, onSort, empty }: DataGridProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const { start, end, onScroll } = useVirtualRows(scrollerRef, {
     rowCount: rows.length,
@@ -51,14 +56,12 @@ export function DataGrid({ orders, rows, columns, widths, empty }: DataGridProps
         <div className="grid__canvas" style={{ height: HEADER_HEIGHT + rows.length * ROW_HEIGHT }}>
           <div className="grid__header" role="row" aria-rowindex={1}>
             {columns.map((column) => (
-              <div
+              <HeaderCell
                 key={column.key}
-                role="columnheader"
-                className={`hcell${column.align === 'right' ? ' hcell--right' : ''}`}
-                style={CELL_STYLE[column.key]}
-              >
-                <span className="hcell__label">{column.label}</span>
-              </div>
+                column={column}
+                sortDirection={sort?.key === column.key ? sort.direction : null}
+                onSort={onSort}
+              />
             ))}
           </div>
           {visible}

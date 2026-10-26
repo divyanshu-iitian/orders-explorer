@@ -38,8 +38,6 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: 2px;
-  padding: 0 8px;
   border-right: 1px solid var(--border);
   background: inherit;
   font-size: var(--fs-sm);
@@ -48,7 +46,35 @@
   user-select: none;
 }
 
-.hcell--right {
+.hcell.is-sorted {
+  color: var(--text);
+}
+
+.hcell__sort {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  height: 100%;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  font-weight: inherit;
+  text-align: left;
+}
+
+.hcell__sort:hover {
+  color: var(--text);
+  background: rgb(0 0 0 / 0.03);
+}
+
+.hcell__sort svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.hcell--right .hcell__sort {
   justify-content: flex-end;
 }
 
