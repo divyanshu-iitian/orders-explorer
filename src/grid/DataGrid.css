@@ -1,0 +1,151 @@
+.grid-wrap {
+  position: relative;
+  height: 100%;
+  min-width: 0;
+}
+
+.grid {
+  position: relative;
+  height: 100%;
+  overflow: auto;
+  background: var(--surface);
+  outline: none;
+  overscroll-behavior: contain;
+}
+
+.grid__canvas {
+  position: relative;
+  min-width: 100%;
+  width: var(--grid-w);
+}
+
+/* ---- header ---- */
+
+.grid__header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  width: var(--grid-w);
+  min-width: 100%;
+  height: 32px;
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--surface-muted);
+}
+
+.hcell {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  padding: 0 8px;
+  border-right: 1px solid var(--border);
+  background: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.hcell--right {
+  justify-content: flex-end;
+}
+
+.hcell__label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ---- rows ---- */
+
+.grid__row {
+  position: absolute;
+  left: 0;
+  display: flex;
+  width: var(--grid-w);
+  min-width: 100%;
+  height: 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.grid__row:hover {
+  background: var(--row-hover);
+}
+
+.gcell {
+  flex: none;
+  padding: 0 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 27px;
+  background: inherit;
+}
+
+.gcell--right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.gcell--mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+/* ---- cell content ---- */
+
+.muted {
+  color: var(--text-faint);
+}
+
+.status::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin: 0 6px 1px 0;
+  border-radius: 50%;
+  background: var(--status-color, var(--text-faint));
+}
+
+.status--pending {
+  --status-color: #c48a00;
+}
+.status--processing {
+  --status-color: #6b5bd6;
+}
+.status--shipped {
+  --status-color: #2a7fd4;
+}
+.status--delivered {
+  --status-color: #2f9e5b;
+}
+.status--cancelled {
+  --status-color: #c2453d;
+}
+
+.prio {
+  font-variant-numeric: tabular-nums;
+}
+
+.prio--1 {
+  font-weight: 600;
+  color: var(--danger);
+}
+
+/* ---- empty state ---- */
+
+.grid__empty {
+  position: absolute;
+  inset: 32px 0 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.grid__empty > * {
+  pointer-events: auto;
+}

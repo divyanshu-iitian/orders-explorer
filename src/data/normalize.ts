@@ -1,13 +1,5 @@
 import { parseTimestamp } from './dates'
-import {
-  CHANNELS,
-  PAYMENT_METHODS,
-  REGIONS,
-  STATUSES,
-  type NormalizeReport,
-  type Order,
-  type Priority,
-} from './types'
+import { CHANNELS, PAYMENT_METHODS, REGIONS, STATUSES, type NormalizeReport, type Order, type Priority } from './types'
 
 /**
  * The single place where raw records from orders.json are cleaned up.
